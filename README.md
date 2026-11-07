@@ -43,13 +43,52 @@ Os 5 humores, com 4 quadros de animação cada:
 - Use **apenas endereços públicos**. O BitPet nunca precisa de chave privada nem de seed. Nunca digite uma seed em nenhum lugar.
 - As alterações pela página só são aceitas com um **PIN de 6 dígitos que aparece só na tela do aparelho**. Veja [Segurança da configuração](#segurança-da-configuração) para os limites dessa proteção.
 
-## Hardware
+## Hardware necessário
 
-- Placa **ESP32-2432S028**, conhecida como **CYD** (Cheap Yellow Display): ESP32, tela TFT 2,8" 240×320 (ILI9341) e toque resistivo (XPT2046).
-- Cabo USB para energia e gravação.
-- Opcional: suporte de acrílico.
+### Lista de materiais
 
-> Algumas CYD vêm com a tela **ST7789** em vez da ILI9341 (geralmente as que têm duas portas USB). Para elas, o `User_Setup.h` precisa de outro driver e as cores/inversão mudam. Os passos abaixo foram testados com a variante ILI9341.
+| Item | Obrigatório | Observação |
+|---|---|---|
+| Placa **ESP32-2432S028** (CYD, *Cheap Yellow Display*) | Sim | Já vem com a tela, o toque e o ESP32 na mesma placa. É a única peça eletrônica do projeto |
+| Cabo **USB** (micro-USB ou USB-C, conforme a sua placa) | Sim | Precisa ser um cabo de **dados**, não só de carga. Serve para gravar e para alimentar o aparelho |
+| Fonte USB de **5 V** (carregador de celular, 1 A ou mais) | Sim, para uso fixo | Depois de gravado, o BitPet só precisa de energia, não de computador |
+| Suporte de acrílico | Não | Só para deixar a placa em pé na mesa |
+| Rede **Wi-Fi 2,4 GHz** com internet | Sim | O ESP32 **não conecta em 5 GHz**. Redes que só aceitam 5 GHz, ou que pedem login em uma página (hotéis, empresas), não funcionam |
+
+Não precisa de solda, protoboard, sensores nem de nenhuma outra peça.
+
+### Especificações da placa
+
+| Componente | Detalhe |
+|---|---|
+| Microcontrolador | ESP32-WROOM-32 (dois núcleos, Wi-Fi e Bluetooth), 4 MB de flash |
+| Tela | TFT 2,8" **240×320**, controlador **ILI9341**, usada na horizontal (320×240) |
+| Toque | Resistivo, controlador **XPT2046** |
+| Conversor USB | CH340 ou CP2102, o computador reconhece como uma porta COM |
+| Botão | **BOOT** (GPIO 0), usado no menu de teste e na gravação |
+
+### Pinos usados pelo projeto (já fixos na placa)
+
+| Função | Pinos |
+|---|---|
+| Tela (SPI) | MISO 12, MOSI 13, SCLK 14, CS 15, DC 2, luz de fundo 21 |
+| Toque (SPI próprio) | CLK 25, MISO 39, MOSI 32, CS 33, IRQ 36 |
+| Botão BOOT | GPIO 0 |
+
+Você não precisa ligar nada. Esses são os pinos internos da placa e já estão configurados em [`User_Setup.h`](User_Setup.h) e no `bitpet.ino`.
+
+### Como saber se a sua placa serve
+
+- A placa deve ter a inscrição **ESP32-2432S028** (ou "CYD", "ESP32 Display 2.8") e uma tela de **2,8 polegadas** com toque.
+- **Variante ILI9341 (a testada):** geralmente tem **uma** porta USB (micro-USB). É a que este guia cobre.
+- **Variante ST7789:** algumas CYD, em geral as que têm **duas** portas USB (micro-USB e USB-C), vêm com a tela ST7789. Ela precisa de outro driver no `User_Setup.h`, e as cores e a inversão mudam. O BitPet deve funcionar, mas os passos de configuração da tela são outros.
+- **Outras placas** (ESP32-S3, ESP32-C3, telas de outro tamanho) **não são compatíveis**, porque os pinos e o driver mudam.
+
+### Consumo e cuidados
+
+- O consumo é baixo, na faixa de 150 a 250 mA em uso normal, com picos maiores ao conectar no Wi-Fi. Uma porta USB de computador ou um carregador comum bastam.
+- Evite cabos muito finos ou longos: a queda de tensão pode causar reinícios.
+- A tela é de uso interno. Não deixe a placa ao sol direto nem em ambiente úmido.
 
 ## Instalação
 
