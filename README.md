@@ -21,13 +21,29 @@ Um mini-pet estilo Tamagotchi que vive numa tela de ESP32 e mostra o **saldo de 
 | Com fome | baixa | até −5% |
 | Quase morto | baixa extrema | abaixo de −5% |
 
+#### Modo DCA (opcional)
+
+Na página de configuração, em **Humor do pet**, você pode trocar o critério. Em vez do preço, o pet segue a **regularidade dos seus depósitos** no endereço. Escolha **diário**, **semanal** ou **mensal**. O aparelho consulta a blockchain e mede o tempo desde o último depósito, ou seja, a última transação que aumentou o saldo. Saídas não contam.
+
+| Tempo desde o último depósito ÷ período | Humor |
+|---|---|
+| até 0,5 | Alimentado |
+| até 1 | Feliz |
+| até 1,25 | Normal |
+| até 2 | Com fome |
+| acima de 2 | Quase morto |
+
+Um depósito ainda não confirmado (na mempool) já alimenta o pet. A barra do topo passa a mostrar a saciedade pelo prazo (100% logo após o depósito, 50% no vencimento, 0% com o dobro do prazo). A caixa de preço continua mostrando a variação de 24h. A opção **Teste** percorre os 5 humores a cada 4 segundos, só para demonstração. O modo padrão continua sendo **Pelo preço**.
+
 - É **interativo** (veja [Toque na tela](#toque-na-tela)).
 - Configuração pelo celular em cerca de 1 minuto, protegida por **PIN aleatório** mostrado na tela do aparelho.
 - Você pode **trocar o personagem** enviando a sua própria folha de sprites pela página de configuração.
 
 Os 5 humores, com 4 quadros de animação cada:
 
-![Os 5 humores, 4 quadros cada](docs/sprites-preview.png)
+<p align="center">
+  <img src="docs/sprites-preview.png" width="48%" alt="Os 5 humores, 4 quadros cada">
+</p>
 
 <p align="center">
   <img src="docs/screenshots/bitpet_sad.png" width="48%" alt="BitPet com fome, pensando em uma moeda">
